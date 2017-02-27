@@ -38,7 +38,7 @@ class User(Model):
     class Meta:
         table_name = 'test_users'
         region = 'eu-central-1'
-        #host = "http://localhost:8000"
+        # host = "http://localhost:8000"
 
     def __init__(self, hash_key=None, range_key=None, **args):
         Model.__init__(self, hash_key, range_key, **args)
