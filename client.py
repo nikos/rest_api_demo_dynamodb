@@ -1,5 +1,9 @@
 import requests
 
+wrong_pw = requests.post('http://127.0.0.1:5000/login',
+                         json={'email': 'you@email.com', 'password': 'wrong'})
+print(wrong_pw.status_code)
+
 r = requests.post('http://127.0.0.1:5000/login',
                   json={'email': 'you@email.com', 'password': 'yourpass'})
 

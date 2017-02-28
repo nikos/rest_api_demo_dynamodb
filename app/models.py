@@ -6,6 +6,8 @@ from pynamodb.indexes import GlobalSecondaryIndex
 from pynamodb.models import Model
 from werkzeug.security import check_password_hash, generate_password_hash
 
+import settings
+
 
 def is_password_hash(pwhash):
     if pwhash.count('$') < 2:
@@ -37,8 +39,9 @@ class UserEmailIndex(GlobalSecondaryIndex):
 class User(Model):
     class Meta:
         table_name = 'test_users'
-        region = 'eu-central-1'
-        # host = "http://localhost:8000"
+        region = settings.DYNAMOBD_REGION
+        if settings.DYNAMOBD_URL:
+            host = settings.DYNAMOBD_URL
 
     def __init__(self, hash_key=None, range_key=None, **args):
         Model.__init__(self, hash_key, range_key, **args)
@@ -60,5 +63,10 @@ class User(Model):
             yield name, attr.serialize(getattr(self, name))
 
 
-if not User.exists():
-    User.create_table(read_capacity_units=1, write_capacity_units=1, wait=True)
+def init_db():
+    """
+    Ensure table exists and create some sample data.
+    """
+    if not User.exists():
+        User.create_table(read_capacity_units=1, write_capacity_units=1, wait=True)
+        User(email='you@email.com', first_name='John', last_name='Doe', password='yourpass').save()

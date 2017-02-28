@@ -16,3 +16,6 @@ JWT_EXPIRATION_DELTA = 7 * 24 * 60 * 60
 SECRET_KEY = 'Super duper secret'
 
 # Flask-DynamoDB settings
+DYNAMOBD_REGION = 'eu-central-1'
+# DYNAMOBD_URL = "http://localhost:8000"
+DYNAMOBD_URL = None

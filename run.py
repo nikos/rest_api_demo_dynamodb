@@ -1,17 +1,16 @@
 #!/usr/bin/env python2
 
-import os
-from datetime import timedelta
 import logging.config
-import settings
+from datetime import timedelta
 
-from flask import Flask, jsonify, request
+from flask import Flask
 from flask_cors import CORS
-from flask_jwt import JWT, jwt_required
-from flask_restplus import Api
+from flask_jwt import JWT
 
-from auth import identity, authenticate
-from models import User
+import settings
+from app.api import api
+from app.auth import identity, authenticate
+from app.models import init_db
 
 app = Flask(__name__)
 logging.config.fileConfig('logging.conf')
@@ -37,29 +36,8 @@ def initialize_app(flask_app):
     configure_app(flask_app)
     CORS(flask_app)
     JWT(flask_app, authenticate, identity)
-    Api(flask_app)
-    #init_db()
-
-
-@app.route('/protected')
-@jwt_required()
-def protected():
-    print(User.count())
-    # print(User.dumps())
-    # User.query('Smith', first_name__begins_with='J'):
-    first_user = None
-    for user in User.scan():
-        print(dict(user))
-        first_user = user
-
-    return jsonify(dict(first_user))
-    # return '%s' % current_identity
-
-
-@app.route('/mylogin', methods=['POST'])
-def mylogin():
-    print(request.get_json())
-    return jsonify({'status': 'ok'})
+    api.init_app(flask_app)
+    init_db()
 
 
 if __name__ == "__main__":

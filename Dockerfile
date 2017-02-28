@@ -20,4 +20,4 @@ COPY . /usr/src/app
 
 EXPOSE 5000
 
-CMD cd /usr/src/app && python app.py
+CMD cd /usr/src/app && python run.py
