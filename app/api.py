@@ -55,5 +55,5 @@ class Protected(Resource):
 @api.route('/mylogin')
 class Unprotected(Resource):
     def post(self):
-        print(request.get_json())
+        print(request.get_json(silent=True))
         return {'status': 'ok'}
